@@ -1,1 +1,40 @@
-r
+// testCapos.wtest
+import capos.*
+import artefactos.*
+import wollok.game.*
+
+describe "prueba1" {
+  method initialize() {
+    rolando.LiberarEspacio()
+    rolando.recoger(espadaDelDestino)
+    rolando.recoger(libroDeHechizos)
+  }
+  
+  test "capacidad de artefactos" {
+    //self.initialize()
+    //rolando.recoger(collarDivino)
+    assert.throwsExceptionWithMessage(
+      "No puede recoger más artefactos",
+      { rolando.recoger(collarDivino) }
+    )
+  }
+  
+  test "castillo de piedra" {
+    //self.initialize()
+    rolando.ingresoAlCastillo()
+    assert.that(castilloDePiedra.artefactosGuardados().size() == 2)
+    assert.that(rolando.artefactos().size() == 0)
+    rolando.recoger(collarDivino)
+    assert.that(rolando.poseeArtefacto(collarDivino))
+    rolando.ingresoAlCastillo()
+    assert.that(castilloDePiedra.artefactosGuardados().size() == 3)
+    assert.that(rolando.artefactos().size() == 0)
+    assert.that(
+      (castilloDePiedra.tieneGuardado(
+        collarDivino
+      ) && castilloDePiedra.tieneGuardado(
+        espadaDelDestino
+      )) && castilloDePiedra.tieneGuardado(libroDeHechizos)
+    )
+  }
+}
