@@ -1,1 +1,74 @@
-r
+// testCapos.wtest
+import capos.*
+import artefactos.*
+import wollok.game.*
+
+describe "prueba1" {
+  method initialize() {
+    rolando.liberarEspacio()
+    //console.println("anda sin llamar")
+    rolando.recoger(espadaDelDestino)
+    rolando.recoger(libroDeHechizos)
+  }
+  
+  test "capacidad de artefactos" {
+    assert.throwsExceptionWithMessage(
+      "No puede recoger más artefactos",
+      { rolando.recoger(collarDivino) }
+    )
+  }
+  
+  test "castillo de piedra" {
+    rolando.ingresoAlCastillo()
+    assert.that(castilloDePiedra.artefactosGuardados().size() == 2)
+    assert.that(rolando.artefactos().size() == 0)
+    rolando.recoger(collarDivino)
+    assert.that(rolando.poseeArtefacto(collarDivino))
+    rolando.ingresoAlCastillo()
+    assert.that(castilloDePiedra.artefactosGuardados().size() == 3)
+    assert.that(rolando.artefactos().size() == 0)
+    assert.that(
+      (castilloDePiedra.tieneGuardado(
+        collarDivino
+      ) && castilloDePiedra.tieneGuardado(
+        espadaDelDestino
+      )) && castilloDePiedra.tieneGuardado(libroDeHechizos)
+    )
+  }
+
+  test "Saber los artefactos de rolando y del castillo" {
+    //castillo tiene espada y libro, el collar no lo tiene
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    assert.equals(1, rolando.artefactos().size())
+    assert.that(rolando.poseeArtefacto(armaduraDeAceroValyrion))
+    assert.notThat(rolando.poseeArtefacto(espadaDelDestino))
+    assert.that(rolando.todosLosArtefactos().size() == 3)
+    assert.that(rolando.todosLosArtefactos().contains(espadaDelDestino))
+    assert.that(rolando.todosLosArtefactos().contains(libroDeHechizos))
+    assert.that(rolando.todosLosArtefactos().contains(armaduraDeAceroValyrion))
+    
+  }
+
+  test "Saber historia de encuentro con artefactos" {
+    //castillo tiene espada y libro, el collar no lo tiene
+    assert.throwsExceptionWithMessage(
+      "No puede recoger más artefactos",
+      { rolando.recoger(collarDivino) }
+    )
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    rolando.recoger(collarDivino)
+    assert.that(rolando.todosLosArtefactos() == [espadaDelDestino, libroDeHechizos, armaduraDeAceroValyrion, collarDivino])
+  }
+
+  test "ejemplo de batalla" {
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    rolando.recoger(collarDivino)
+    rolando.batallas(5)
+    assert.equals(64, rolando.poderDePelea())
+    assert.equals(5, rolando.batallas())
+    
+  }
+}
