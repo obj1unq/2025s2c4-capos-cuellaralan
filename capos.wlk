@@ -7,7 +7,7 @@ object rolando {
 
     method artefactos() = artefactos
     method todosLosArtefactos() {
-      return artefactos + castilloDePiedra.artefactosGuardados()
+      return castilloDePiedra.artefactosGuardados() + artefactos
     }
     method recoger(artefacto) {
         if (!self.validarSiPuedeRecoger()) {
@@ -24,13 +24,13 @@ object rolando {
       return artefactos.size() < capacidadDeArtefactos
     }
 
-    method LiberarEspacio() {
+    method liberarEspacio() {
       artefactos.clear()
     }
 
     method ingresoAlCastillo() {
       castilloDePiedra.guardarArtefactos(artefactos)
-      self.LiberarEspacio()
+      self.liberarEspacio()
     }
 }
 

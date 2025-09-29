@@ -5,14 +5,13 @@ import wollok.game.*
 
 describe "prueba1" {
   method initialize() {
-    rolando.LiberarEspacio()
+    rolando.liberarEspacio()
+    //console.println("anda sin llamar")
     rolando.recoger(espadaDelDestino)
     rolando.recoger(libroDeHechizos)
   }
   
   test "capacidad de artefactos" {
-    //self.initialize()
-    //rolando.recoger(collarDivino)
     assert.throwsExceptionWithMessage(
       "No puede recoger más artefactos",
       { rolando.recoger(collarDivino) }
@@ -20,7 +19,6 @@ describe "prueba1" {
   }
   
   test "castillo de piedra" {
-    //self.initialize()
     rolando.ingresoAlCastillo()
     assert.that(castilloDePiedra.artefactosGuardados().size() == 2)
     assert.that(rolando.artefactos().size() == 0)
@@ -36,5 +34,31 @@ describe "prueba1" {
         espadaDelDestino
       )) && castilloDePiedra.tieneGuardado(libroDeHechizos)
     )
+  }
+
+  test "Saber los artefactos de rolando y del castillo" {
+    //castillo tiene espada y libro, el collar no lo tiene
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    assert.equals(1, rolando.artefactos().size())
+    assert.that(rolando.poseeArtefacto(armaduraDeAceroValyrion))
+    assert.notThat(rolando.poseeArtefacto(espadaDelDestino))
+    assert.that(rolando.todosLosArtefactos().size() == 3)
+    assert.that(rolando.todosLosArtefactos().contains(espadaDelDestino))
+    assert.that(rolando.todosLosArtefactos().contains(libroDeHechizos))
+    assert.that(rolando.todosLosArtefactos().contains(armaduraDeAceroValyrion))
+    
+  }
+
+  test "Saber historia de encuentro con artefactos" {
+    //castillo tiene espada y libro, el collar no lo tiene
+    assert.throwsExceptionWithMessage(
+      "No puede recoger más artefactos",
+      { rolando.recoger(collarDivino) }
+    )
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    rolando.recoger(collarDivino)
+    assert.that(rolando.todosLosArtefactos() == [espadaDelDestino, libroDeHechizos, armaduraDeAceroValyrion, collarDivino])
   }
 }
