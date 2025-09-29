@@ -61,4 +61,14 @@ describe "prueba1" {
     rolando.recoger(collarDivino)
     assert.that(rolando.todosLosArtefactos() == [espadaDelDestino, libroDeHechizos, armaduraDeAceroValyrion, collarDivino])
   }
+
+  test "ejemplo de batalla" {
+    rolando.ingresoAlCastillo()
+    rolando.recoger(armaduraDeAceroValyrion)
+    rolando.recoger(collarDivino)
+    rolando.batallas(5)
+    assert.equals(64, rolando.poderDePelea())
+    assert.equals(5, rolando.batallas())
+    
+  }
 }

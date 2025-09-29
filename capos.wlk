@@ -2,10 +2,12 @@ import wollok.game.*
 
 
 object rolando {
+  var property poderBase = 50 
+  var property batallas = 0
   const artefactos = []
   var property capacidadDeArtefactos = 2
 
-    method artefactos() = artefactos
+    method artefactos() = artefactos 
     method todosLosArtefactos() {
       return castilloDePiedra.artefactosGuardados() + artefactos
     }
@@ -31,6 +33,14 @@ object rolando {
     method ingresoAlCastillo() {
       castilloDePiedra.guardarArtefactos(artefactos)
       self.liberarEspacio()
+    }
+    
+    method poderDePelea() = poderBase + self.poderDeArtefactos() 
+
+    method poderDeArtefactos() {
+      var poderAdquirido = 0
+      artefactos.forEach({ a => poderAdquirido +=  a.poder(self) })
+      return poderAdquirido
     }
 }
 
